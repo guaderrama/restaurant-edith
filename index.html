@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rueda del Mar de Cortés - Los Cabos Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Pantalla de Bienvenida -->
+        <section id="welcome-screen" class="screen active">
+            <div class="ocean-bg"></div>
+            <div class="content-wrapper">
+                <div class="logo-container">
+                    <div class="whale-icon">🐋</div>
+                    <h1 class="app-title">Rueda del Mar de Cortés</h1>
+                    <p class="app-subtitle">Los Cabos Experience</p>
+                </div>
+
+                <div class="welcome-message">
+                    <p class="welcome-text" data-i18n="welcome_message">
+                        Descubre tu bebida ideal inspirada en el mar y el desierto de Baja California Sur
+                    </p>
+                </div>
+
+                <div class="language-selector">
+                    <button class="lang-btn" data-lang="es">
+                        <span class="flag">🇲🇽</span>
+                        <span>Español</span>
+                    </button>
+                    <button class="lang-btn" data-lang="en">
+                        <span class="flag">🇺🇸</span>
+                        <span>English</span>
+                    </button>
+                </div>
+
+                <button class="btn-primary start-btn" data-i18n="start_experience">
+                    Comenzar Experiencia
+                </button>
+
+                <div class="wave-decoration">
+                    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+                        <path d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z" fill="rgba(255,255,255,0.1)"></path>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pantalla del Sommelier IA -->
+        <section id="sommelier-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-target="welcome-screen">←</button>
+                <h2 data-i18n="sommelier_title">Sommelier IA</h2>
+                <div class="progress-indicator">
+                    <span class="progress-text">1/4</span>
+                </div>
+            </div>
+
+            <div class="sommelier-container">
+                <div class="sommelier-avatar">
+                    <div class="avatar-circle">
+                        <span class="avatar-icon">🌊</span>
+                    </div>
+                    <p class="sommelier-name" data-i18n="sommelier_greeting">
+                        Soy tu sommelier de Los Cabos
+                    </p>
+                </div>
+
+                <div class="question-container">
+                    <!-- Las preguntas se cargan dinámicamente -->
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pantalla de Recomendación -->
+        <section id="recommendation-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-target="sommelier-screen">←</button>
+                <h2 data-i18n="your_recommendation">Tu Recomendación</h2>
+            </div>
+
+            <div class="recommendation-container">
+                <div class="drink-card">
+                    <div class="drink-image">
+                        <span class="drink-emoji">🍹</span>
+                    </div>
+                    <h3 class="drink-name"></h3>
+                    <p class="drink-description"></p>
+                    <div class="drink-pairing">
+                        <span class="pairing-icon">🍽️</span>
+                        <p class="pairing-text"></p>
+                    </div>
+                </div>
+
+                <div class="recommendation-actions">
+                    <button class="btn-primary order-drink-btn" data-i18n="order_drink">
+                        Pedir esta bebida
+                    </button>
+                    <button class="btn-secondary see-alternative-btn" data-i18n="see_alternative">
+                        Ver alternativa
+                    </button>
+                </div>
+
+                <div class="sommelier-tip">
+                    <span class="tip-icon">💡</span>
+                    <p class="tip-text" data-i18n="perfect_pairing">
+                        Marida perfecto con tu plato y el atardecer frente al mar.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pantalla de Transición a Ruleta -->
+        <section id="wheel-intro-screen" class="screen">
+            <div class="wheel-intro-container">
+                <div class="success-badge">
+                    <span class="badge-icon">✓</span>
+                </div>
+
+                <h2 class="intro-title" data-i18n="drink_confirmed">
+                    ¡Bebida Confirmada!
+                </h2>
+
+                <p class="intro-text" data-i18n="wheel_intro_text">
+                    Ahora gira la <strong>Rueda de la Ballena</strong> para desbloquear un beneficio especial sobre tu bebida.
+                </p>
+
+                <div class="wheel-preview">
+                    <div class="mini-wheel">🎡</div>
+                </div>
+
+                <button class="btn-primary spin-intro-btn" data-i18n="spin_wheel">
+                    Girar la Rueda
+                </button>
+            </div>
+        </section>
+
+        <!-- Pantalla de la Ruleta -->
+        <section id="wheel-screen" class="screen">
+            <div class="screen-header">
+                <h2 data-i18n="whale_wheel">Rueda de la Ballena</h2>
+            </div>
+
+            <div class="wheel-container">
+                <div class="wheel-wrapper">
+                    <div class="wheel-pointer">▼</div>
+                    <canvas id="wheel-canvas" width="320" height="320"></canvas>
+                </div>
+
+                <div class="wheel-info">
+                    <p class="wheel-instruction" data-i18n="tap_to_spin">
+                        Toca para girar
+                    </p>
+                </div>
+
+                <button class="btn-primary spin-btn" data-i18n="spin">
+                    ¡Girar!
+                </button>
+            </div>
+        </section>
+
+        <!-- Pantalla de Resultado -->
+        <section id="result-screen" class="screen">
+            <div class="result-container">
+                <div class="result-icon-wrapper">
+                    <span class="result-icon"></span>
+                </div>
+
+                <h2 class="result-title"></h2>
+                <p class="result-prize"></p>
+
+                <div class="result-details">
+                    <div class="your-drink">
+                        <span class="label" data-i18n="your_drink">Tu bebida:</span>
+                        <span class="drink-name-result"></span>
+                    </div>
+                    <div class="your-benefit">
+                        <span class="label" data-i18n="your_benefit">Tu beneficio:</span>
+                        <span class="benefit-detail"></span>
+                    </div>
+                </div>
+
+                <div class="waiter-code">
+                    <p data-i18n="show_waiter">Muestra este código al mesero:</p>
+                    <div class="code-display"></div>
+                </div>
+
+                <div class="result-actions">
+                    <button class="btn-primary confirm-result-btn" data-i18n="confirm_order">
+                        Confirmar Pedido
+                    </button>
+                    <button class="btn-secondary share-btn" data-i18n="share_experience">
+                        Compartir Experiencia
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pantalla Final -->
+        <section id="final-screen" class="screen">
+            <div class="final-container">
+                <div class="thank-you-icon">🐋</div>
+
+                <h2 class="thank-you-title" data-i18n="thank_you">
+                    ¡Gracias!
+                </h2>
+
+                <p class="thank-you-message" data-i18n="enjoy_drink">
+                    Tu mesero preparará tu bebida con el beneficio especial.
+                </p>
+
+                <div class="newsletter-signup">
+                    <p data-i18n="stay_connected">
+                        ¿Quieres recibir recomendaciones y descuentos exclusivos?
+                    </p>
+                    <div class="input-group">
+                        <input type="text" class="phone-input" placeholder="WhatsApp o Email">
+                        <button class="btn-secondary submit-contact-btn" data-i18n="send">
+                            Enviar
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn-text restart-btn" data-i18n="play_again">
+                    Jugar de nuevo
+                </button>
+
+                <div class="social-proof">
+                    <p data-i18n="people_playing">
+                        <strong>247</strong> personas han jugado hoy
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/wheel.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
