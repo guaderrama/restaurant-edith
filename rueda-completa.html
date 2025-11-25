@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rueda del Mar de Cortés - Los Cabos Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --ocean-deep: #0a4d68;
+    --ocean-medium: #088395;
+    --ocean-light: #05bfdb;
+    --ocean-foam: #00ffca;
+    --desert-sand: #f5e6d3;
+    --desert-warm: #e8d5b7;
+    --cactus-green: #5d8a66;
+    --terracotta: #c4704f;
+    --sunset-orange: #ff6b35;
+    --sunset-pink: #f7931e;
+    --sunset-gold: #fbb03b;
+    --sunset-coral: #ff8c69;
+    --white: #ffffff;
+    --off-white: #faf8f5;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a68;
+    --text-light: #8888a0;
+    --gradient-ocean: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean-medium) 50%, var(--ocean-light) 100%);
+    --gradient-sunset: linear-gradient(135deg, var(--sunset-orange) 0%, var(--sunset-pink) 50%, var(--sunset-gold) 100%);
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+    --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem; --space-lg: 1.5rem; --space-xl: 2rem; --space-2xl: 3rem;
+    --radius-sm: 8px; --radius-md: 12px; --radius-lg: 20px; --radius-xl: 30px; --radius-full: 50%;
+    --shadow-soft: 0 4px 20px rgba(10, 77, 104, 0.1);
+    --shadow-medium: 0 8px 30px rgba(10, 77, 104, 0.15);
+    --transition-fast: 0.2s ease; --transition-medium: 0.3s ease;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font-body); background: var(--gradient-ocean); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
+#app { max-width: 430px; margin: 0 auto; min-height: 100vh; background: var(--off-white); box-shadow: 0 12px 40px rgba(10, 77, 104, 0.25); }
+.screen { display: none; min-height: 100vh; padding: var(--space-lg); position: relative; overflow: hidden; }
+.screen.active { display: flex; flex-direction: column; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+#welcome-screen { background: var(--gradient-ocean); color: var(--white); justify-content: center; align-items: center; text-align: center; }
+.ocean-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 20% 80%, rgba(0, 255, 202, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(5, 191, 219, 0.2) 0%, transparent 50%), var(--gradient-ocean); z-index: 0; }
+.content-wrapper { position: relative; z-index: 1; width: 100%; }
+.logo-container { margin-bottom: var(--space-2xl); }
+.whale-icon { font-size: 4rem; margin-bottom: var(--space-md); animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.app-title { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: var(--space-xs); text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+.app-subtitle { font-size: 1rem; font-weight: 300; opacity: 0.9; letter-spacing: 2px; text-transform: uppercase; }
+.welcome-message { margin-bottom: var(--space-2xl); padding: 0 var(--space-lg); }
+.welcome-text { font-size: 1.1rem; line-height: 1.6; opacity: 0.95; }
+.language-selector { display: flex; gap: var(--space-md); justify-content: center; margin-bottom: var(--space-2xl); }
+.lang-btn { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-md) var(--space-lg); background: rgba(255, 255, 255, 0.15); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: var(--radius-lg); color: var(--white); font-family: var(--font-body); font-size: 0.95rem; cursor: pointer; transition: all var(--transition-fast); backdrop-filter: blur(10px); }
+.lang-btn:hover, .lang-btn.selected { background: rgba(255, 255, 255, 0.25); border-color: var(--white); transform: translateY(-2px); }
+.lang-btn .flag { font-size: 1.3rem; }
+.btn-primary { display: inline-flex; align-items: center; justify-content: center; padding: var(--space-md) var(--space-xl); background: var(--gradient-sunset); color: var(--white); border: none; border-radius: var(--radius-xl); font-family: var(--font-body); font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all var(--transition-medium); box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4); min-width: 200px; }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-secondary { display: inline-flex; align-items: center; justify-content: center; padding: var(--space-md) var(--space-lg); background: transparent; color: var(--ocean-deep); border: 2px solid var(--ocean-medium); border-radius: var(--radius-xl); font-family: var(--font-body); font-size: 1rem; font-weight: 500; cursor: pointer; transition: all var(--transition-fast); }
+.btn-secondary:hover { background: var(--ocean-deep); color: var(--white); border-color: var(--ocean-deep); }
+.btn-text { background: none; border: none; color: var(--text-secondary); font-family: var(--font-body); font-size: 0.95rem; cursor: pointer; text-decoration: underline; }
+.screen-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: var(--space-lg); border-bottom: 1px solid rgba(0, 0, 0, 0.08); margin-bottom: var(--space-lg); }
+.back-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--white); border: 1px solid rgba(0, 0, 0, 0.1); border-radius: var(--radius-full); font-size: 1.2rem; cursor: pointer; }
+.back-btn:hover { background: var(--ocean-deep); color: var(--white); }
+.screen-header h2 { font-family: var(--font-display); font-size: 1.3rem; color: var(--ocean-deep); }
+.progress-indicator { background: var(--ocean-light); color: var(--white); padding: var(--space-xs) var(--space-md); border-radius: var(--radius-lg); font-size: 0.85rem; font-weight: 600; }
+.sommelier-container { flex: 1; display: flex; flex-direction: column; }
+.sommelier-avatar { text-align: center; margin-bottom: var(--space-xl); }
+.avatar-circle { width: 80px; height: 80px; background: var(--gradient-ocean); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-md); box-shadow: var(--shadow-medium); }
+.avatar-icon { font-size: 2.5rem; }
+.sommelier-name { font-size: 1rem; color: var(--text-secondary); }
+.question-container { flex: 1; }
+.question-card { background: var(--white); border-radius: var(--radius-lg); padding: var(--space-xl); box-shadow: var(--shadow-soft); animation: slideUp 0.4s ease; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.question-text { font-family: var(--font-display); font-size: 1.25rem; color: var(--ocean-deep); margin-bottom: var(--space-xl); line-height: 1.4; }
+.options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
+.option-btn { display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); padding: var(--space-lg); background: var(--off-white); border: 2px solid transparent; border-radius: var(--radius-md); cursor: pointer; transition: all var(--transition-fast); }
+.option-btn:hover { background: var(--desert-sand); border-color: var(--ocean-light); }
+.option-btn.selected { background: rgba(8, 131, 149, 0.1); border-color: var(--ocean-medium); }
+.option-icon { font-size: 2rem; }
+.option-label { font-size: 0.9rem; font-weight: 500; color: var(--text-primary); text-align: center; }
+.progress-bar { height: 4px; background: rgba(0, 0, 0, 0.1); border-radius: 2px; margin-top: var(--space-xl); overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gradient-sunset); border-radius: 2px; transition: width var(--transition-medium); }
+.recommendation-container { flex: 1; display: flex; flex-direction: column; gap: var(--space-xl); }
+.drink-card { background: var(--white); border-radius: var(--radius-lg); padding: var(--space-xl); text-align: center; box-shadow: var(--shadow-medium); position: relative; overflow: hidden; }
+.drink-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gradient-sunset); }
+.drink-image { width: 120px; height: 120px; background: var(--gradient-ocean); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-lg); box-shadow: var(--shadow-soft); }
+.drink-emoji { font-size: 3.5rem; }
+.drink-name { font-family: var(--font-display); font-size: 1.5rem; color: var(--ocean-deep); margin-bottom: var(--space-sm); }
+.drink-description { color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--space-lg); }
+.drink-pairing { display: flex; align-items: center; justify-content: center; gap: var(--space-sm); padding: var(--space-md); background: var(--desert-sand); border-radius: var(--radius-md); }
+.pairing-icon { font-size: 1.2rem; }
+.pairing-text { font-size: 0.9rem; color: var(--text-secondary); }
+.recommendation-actions { display: flex; flex-direction: column; gap: var(--space-md); }
+.sommelier-tip { display: flex; align-items: flex-start; gap: var(--space-md); padding: var(--space-lg); background: rgba(8, 131, 149, 0.08); border-radius: var(--radius-md); border-left: 3px solid var(--ocean-medium); }
+.tip-icon { font-size: 1.3rem; }
+.tip-text { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; }
+#wheel-intro-screen { background: var(--gradient-ocean); color: var(--white); justify-content: center; align-items: center; text-align: center; }
+.wheel-intro-container { max-width: 320px; }
+.success-badge { width: 70px; height: 70px; background: var(--cactus-green); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); animation: popIn 0.5s ease; }
+@keyframes popIn { 0% { transform: scale(0); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+.badge-icon { font-size: 2rem; font-weight: bold; }
+.intro-title { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: var(--space-lg); }
+.intro-text { font-size: 1.1rem; line-height: 1.6; opacity: 0.95; margin-bottom: var(--space-xl); }
+.intro-text strong { color: var(--sunset-gold); }
+.wheel-preview { margin-bottom: var(--space-xl); }
+.mini-wheel { font-size: 4rem; animation: spin 10s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+#wheel-screen { background: linear-gradient(180deg, var(--ocean-deep) 0%, var(--ocean-medium) 100%); color: var(--white); justify-content: center; align-items: center; }
+#wheel-screen .screen-header { position: absolute; top: 0; left: 0; right: 0; padding: var(--space-lg); border-bottom: none; }
+#wheel-screen .screen-header h2 { color: var(--white); text-align: center; width: 100%; }
+.wheel-container { display: flex; flex-direction: column; align-items: center; gap: var(--space-xl); }
+.wheel-wrapper { position: relative; width: 320px; height: 320px; }
+.wheel-pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 2rem; color: var(--sunset-gold); z-index: 10; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)); }
+#wheel-canvas { width: 100%; height: 100%; border-radius: var(--radius-full); box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.2), 0 0 0 16px rgba(255, 255, 255, 0.1), 0 12px 40px rgba(10, 77, 104, 0.25); }
+.wheel-info { text-align: center; }
+.wheel-instruction { font-size: 1rem; opacity: 0.9; }
+.spin-btn { min-width: 180px; font-size: 1.2rem; padding: var(--space-lg) var(--space-2xl); }
+.spin-btn.spinning { pointer-events: none; opacity: 0.7; }
+#result-screen { background: var(--off-white); justify-content: center; align-items: center; text-align: center; }
+.result-container { width: 100%; max-width: 350px; }
+.result-icon-wrapper { width: 100px; height: 100px; background: var(--gradient-sunset); border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-xl); animation: popIn 0.6s ease; box-shadow: var(--shadow-medium); }
+.result-icon { font-size: 3rem; }
+.result-title { font-family: var(--font-display); font-size: 1.6rem; color: var(--ocean-deep); margin-bottom: var(--space-md); }
+.result-prize { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--space-xl); }
+.result-details { background: var(--white); border-radius: var(--radius-md); padding: var(--space-lg); margin-bottom: var(--space-xl); box-shadow: var(--shadow-soft); }
+.result-details > div { display: flex; justify-content: space-between; padding: var(--space-sm) 0; }
+.result-details > div:not(:last-child) { border-bottom: 1px solid rgba(0, 0, 0, 0.08); }
+.result-details .label { color: var(--text-light); font-size: 0.9rem; }
+.result-details .drink-name-result, .result-details .benefit-detail { font-weight: 600; color: var(--ocean-deep); font-size: 0.9rem; text-align: right; max-width: 60%; }
+.waiter-code { margin-bottom: var(--space-xl); }
+.waiter-code p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: var(--space-sm); }
+.code-display { background: var(--ocean-deep); color: var(--white); padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); font-family: monospace; font-size: 1.5rem; font-weight: 700; letter-spacing: 3px; }
+.result-actions { display: flex; flex-direction: column; gap: var(--space-md); }
+#final-screen { background: var(--gradient-ocean); color: var(--white); justify-content: center; align-items: center; text-align: center; }
+.final-container { width: 100%; max-width: 320px; }
+.thank-you-icon { font-size: 4rem; margin-bottom: var(--space-lg); animation: float 3s ease-in-out infinite; }
+.thank-you-title { font-family: var(--font-display); font-size: 2rem; margin-bottom: var(--space-md); }
+.thank-you-message { font-size: 1.1rem; opacity: 0.95; line-height: 1.5; margin-bottom: var(--space-2xl); }
+.newsletter-signup { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: var(--radius-lg); padding: var(--space-xl); margin-bottom: var(--space-xl); }
+.newsletter-signup p { font-size: 0.95rem; margin-bottom: var(--space-md); opacity: 0.95; }
+.input-group { display: flex; gap: var(--space-sm); }
+.phone-input { flex: 1; padding: var(--space-md); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.1); color: var(--white); font-family: var(--font-body); font-size: 0.95rem; }
+.phone-input::placeholder { color: rgba(255, 255, 255, 0.6); }
+.phone-input:focus { outline: none; border-color: var(--white); }
+#final-screen .btn-secondary { color: var(--white); border-color: rgba(255, 255, 255, 0.5); }
+.restart-btn { color: var(--white); opacity: 0.8; margin-bottom: var(--space-xl); }
+.social-proof { opacity: 0.7; font-size: 0.9rem; }
+#toast-container { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 1000; width: 90%; max-width: 380px; }
+.toast { background: var(--ocean-deep); color: var(--white); padding: var(--space-md) var(--space-lg); border-radius: var(--radius-md); margin-bottom: var(--space-sm); display: flex; align-items: center; gap: var(--space-md); animation: slideInUp 0.3s ease; box-shadow: var(--shadow-medium); }
+@keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.toast.success { background: var(--cactus-green); }
+.celebrate { animation: celebrate 0.8s ease; }
+@keyframes celebrate { 0% { transform: scale(0.8) rotate(-5deg); } 25% { transform: scale(1.1) rotate(5deg); } 50% { transform: scale(0.95) rotate(-3deg); } 75% { transform: scale(1.05) rotate(2deg); } 100% { transform: scale(1) rotate(0deg); } }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <section id="welcome-screen" class="screen active">
+            <div class="ocean-bg"></div>
+            <div class="content-wrapper">
+                <div class="logo-container">
+                    <div class="whale-icon">🐋</div>
+                    <h1 class="app-title">Rueda del Mar de Cortés</h1>
+                    <p class="app-subtitle">Los Cabos Experience</p>
+                </div>
+                <div class="welcome-message">
+                    <p class="welcome-text" data-i18n="welcome_message">Descubre tu bebida ideal inspirada en el mar y el desierto de Baja California Sur</p>
+                </div>
+                <div class="language-selector">
+                    <button class="lang-btn selected" data-lang="es"><span class="flag">🇲🇽</span><span>Español</span></button>
+                    <button class="lang-btn" data-lang="en"><span class="flag">🇺🇸</span><span>English</span></button>
+                </div>
+                <button class="btn-primary start-btn" data-i18n="start_experience">Comenzar Experiencia</button>
+            </div>
+        </section>
+
+        <section id="sommelier-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-target="welcome-screen">←</button>
+                <h2 data-i18n="sommelier_title">Sommelier IA</h2>
+                <div class="progress-indicator"><span class="progress-text">1/4</span></div>
+            </div>
+            <div class="sommelier-container">
+                <div class="sommelier-avatar">
+                    <div class="avatar-circle"><span class="avatar-icon">🌊</span></div>
+                    <p class="sommelier-name" data-i18n="sommelier_greeting">Soy tu sommelier de Los Cabos</p>
+                </div>
+                <div class="question-container"></div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
+            </div>
+        </section>
+
+        <section id="recommendation-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-target="sommelier-screen">←</button>
+                <h2 data-i18n="your_recommendation">Tu Recomendación</h2>
+            </div>
+            <div class="recommendation-container">
+                <div class="drink-card">
+                    <div class="drink-image"><span class="drink-emoji">🍹</span></div>
+                    <h3 class="drink-name"></h3>
+                    <p class="drink-description"></p>
+                    <div class="drink-pairing"><span class="pairing-icon">🍽️</span><p class="pairing-text"></p></div>
+                </div>
+                <div class="recommendation-actions">
+                    <button class="btn-primary order-drink-btn" data-i18n="order_drink">Pedir esta bebida</button>
+                    <button class="btn-secondary see-alternative-btn" data-i18n="see_alternative">Ver alternativa</button>
+                </div>
+                <div class="sommelier-tip"><span class="tip-icon">💡</span><p class="tip-text" data-i18n="perfect_pairing">Marida perfecto con tu plato y el atardecer frente al mar.</p></div>
+            </div>
+        </section>
+
+        <section id="wheel-intro-screen" class="screen">
+            <div class="wheel-intro-container">
+                <div class="success-badge"><span class="badge-icon">✓</span></div>
+                <h2 class="intro-title" data-i18n="drink_confirmed">¡Bebida Confirmada!</h2>
+                <p class="intro-text" data-i18n="wheel_intro_text">Ahora gira la <strong>Rueda de la Ballena</strong> para desbloquear un beneficio especial sobre tu bebida.</p>
+                <div class="wheel-preview"><div class="mini-wheel">🎡</div></div>
+                <button class="btn-primary spin-intro-btn" data-i18n="spin_wheel">Girar la Rueda</button>
+            </div>
+        </section>
+
+        <section id="wheel-screen" class="screen">
+            <div class="screen-header"><h2 data-i18n="whale_wheel">Rueda de la Ballena</h2></div>
+            <div class="wheel-container">
+                <div class="wheel-wrapper">
+                    <div class="wheel-pointer">▼</div>
+                    <canvas id="wheel-canvas" width="320" height="320"></canvas>
+                </div>
+                <div class="wheel-info"><p class="wheel-instruction" data-i18n="tap_to_spin">Toca para girar</p></div>
+                <button class="btn-primary spin-btn" data-i18n="spin">¡Girar!</button>
+            </div>
+        </section>
+
+        <section id="result-screen" class="screen">
+            <div class="result-container">
+                <div class="result-icon-wrapper"><span class="result-icon"></span></div>
+                <h2 class="result-title"></h2>
+                <p class="result-prize"></p>
+                <div class="result-details">
+                    <div class="your-drink"><span class="label" data-i18n="your_drink">Tu bebida:</span><span class="drink-name-result"></span></div>
+                    <div class="your-benefit"><span class="label" data-i18n="your_benefit">Tu beneficio:</span><span class="benefit-detail"></span></div>
+                </div>
+                <div class="waiter-code"><p data-i18n="show_waiter">Muestra este código al mesero:</p><div class="code-display"></div></div>
+                <div class="result-actions">
+                    <button class="btn-primary confirm-result-btn" data-i18n="confirm_order">Confirmar Pedido</button>
+                    <button class="btn-secondary share-btn" data-i18n="share_experience">Compartir Experiencia</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="final-screen" class="screen">
+            <div class="final-container">
+                <div class="thank-you-icon">🐋</div>
+                <h2 class="thank-you-title" data-i18n="thank_you">¡Gracias!</h2>
+                <p class="thank-you-message" data-i18n="enjoy_drink">Tu mesero preparará tu bebida con el beneficio especial.</p>
+                <div class="newsletter-signup">
+                    <p data-i18n="stay_connected">¿Quieres recibir recomendaciones y descuentos exclusivos?</p>
+                    <div class="input-group">
+                        <input type="text" class="phone-input" placeholder="WhatsApp o Email">
+                        <button class="btn-secondary submit-contact-btn" data-i18n="send">Enviar</button>
+                    </div>
+                </div>
+                <button class="btn-text restart-btn" data-i18n="play_again">Jugar de nuevo</button>
+                <div class="social-proof"><p data-i18n="people_playing"><strong>247</strong> personas han jugado hoy</p></div>
+            </div>
+        </section>
+    </div>
+    <div id="toast-container"></div>
+
+<script>
+const APP_DATA={config:{maxSpinsPerTable:2,restaurantName:"Restaurant Edith",location:"Los Cabos, BCS"},questions:{es:[{id:'food',question:'¿Qué pediste de comer?',options:[{id:'seafood',label:'Mariscos',icon:'🦐'},{id:'meat',label:'Carne',icon:'🥩'},{id:'vegetarian',label:'Vegetariano',icon:'🥗'},{id:'snacks',label:'Snacks',icon:'🍿'}]},{id:'flavor',question:'¿Qué te antoja más?',options:[{id:'fresh',label:'Fresco',icon:'🧊'},{id:'creamy',label:'Cremoso',icon:'🥛'},{id:'smoky',label:'Ahumado',icon:'🔥'},{id:'citric',label:'Cítrico',icon:'🍋'}]},{id:'strength',question:'¿Qué tanto alcohol quieres?',options:[{id:'light',label:'Suave',icon:'🌸'},{id:'medium',label:'Medio',icon:'⚖️'},{id:'strong',label:'Fuerte',icon:'💪'},{id:'none',label:'Sin alcohol',icon:'🍃'}]},{id:'sweetness',question:'¿Prefieres sabores más dulces o secos?',options:[{id:'sweet',label:'Dulce',icon:'🍯'},{id:'balanced',label:'Balanceado',icon:'⚖️'},{id:'dry',label:'Seco',icon:'🌵'},{id:'bitter',label:'Amargo',icon:'🍂'}]}],en:[{id:'food',question:'What did you order to eat?',options:[{id:'seafood',label:'Seafood',icon:'🦐'},{id:'meat',label:'Meat',icon:'🥩'},{id:'vegetarian',label:'Vegetarian',icon:'🥗'},{id:'snacks',label:'Snacks',icon:'🍿'}]},{id:'flavor',question:'What are you craving?',options:[{id:'fresh',label:'Fresh',icon:'🧊'},{id:'creamy',label:'Creamy',icon:'🥛'},{id:'smoky',label:'Smoky',icon:'🔥'},{id:'citric',label:'Citrus',icon:'🍋'}]},{id:'strength',question:'How strong do you want it?',options:[{id:'light',label:'Light',icon:'🌸'},{id:'medium',label:'Medium',icon:'⚖️'},{id:'strong',label:'Strong',icon:'💪'},{id:'none',label:'Non-alcoholic',icon:'🍃'}]},{id:'sweetness',question:'Do you prefer sweet or dry flavors?',options:[{id:'sweet',label:'Sweet',icon:'🍯'},{id:'balanced',label:'Balanced',icon:'⚖️'},{id:'dry',label:'Dry',icon:'🌵'},{id:'bitter',label:'Bitter',icon:'🍂'}]}]},drinks:[{id:'margarita-maracuya',name:{es:'Margarita de Maracuyá',en:'Passion Fruit Margarita'},emoji:'🍹',description:{es:'Tequila reposado, licor de naranja, maracuyá fresco y un toque de sal de chile.',en:'Reposado tequila, orange liqueur, fresh passion fruit and a touch of chili salt.'},pairing:{es:'Marida perfecto con mariscos y ceviche',en:'Pairs perfectly with seafood and ceviche'},tags:['seafood','citric','medium','balanced','fresh'],priority:10,margin:'high'},{id:'mezcal-pepino',name:{es:'Mezcal Pepino del Desierto',en:'Desert Cucumber Mezcal'},emoji:'🥒',description:{es:'Mezcal artesanal, pepino fresco, limón y un toque de agave.',en:'Artisanal mezcal, fresh cucumber, lime and a touch of agave.'},pairing:{es:'Ideal con carnes asadas y sabores ahumados',en:'Ideal with grilled meats and smoky flavors'},tags:['meat','smoky','strong','dry','fresh'],priority:9,margin:'high'},{id:'paloma-rosa',name:{es:'Paloma Rosa del Atardecer',en:'Pink Sunset Paloma'},emoji:'🌅',description:{es:'Tequila blanco, toronja rosa, lima y agua mineral con un rim de sal de hibisco.',en:'Blanco tequila, pink grapefruit, lime and sparkling water with hibiscus salt rim.'},pairing:{es:'Perfecto para snacks y botanas',en:'Perfect for snacks and appetizers'},tags:['snacks','citric','light','balanced','fresh'],priority:8,margin:'medium'},{id:'mojito-mango',name:{es:'Mojito de Mango Los Cabos',en:'Los Cabos Mango Mojito'},emoji:'🥭',description:{es:'Ron blanco, mango fresco de la región, hierbabuena y un splash de soda.',en:'White rum, fresh local mango, mint and a splash of soda.'},pairing:{es:'Delicioso con platillos vegetarianos',en:'Delicious with vegetarian dishes'},tags:['vegetarian','fresh','medium','sweet'],priority:7,margin:'medium'},{id:'carajillo-cortés',name:{es:'Carajillo del Mar de Cortés',en:'Sea of Cortez Carajillo'},emoji:'☕',description:{es:'Licor 43, espresso y un twist de naranja flameada.',en:'Licor 43, espresso and a flamed orange twist.'},pairing:{es:'Perfecto después de cualquier comida',en:'Perfect after any meal'},tags:['meat','snacks','creamy','strong','bitter'],priority:8,margin:'high'},{id:'piña-colada-baja',name:{es:'Piña Colada Baja Style',en:'Baja Style Piña Colada'},emoji:'🍍',description:{es:'Ron añejo, piña asada, crema de coco y un toque de canela.',en:'Aged rum, roasted pineapple, coconut cream and a touch of cinnamon.'},pairing:{es:'Combina con mariscos y pescados',en:'Pairs with seafood and fish'},tags:['seafood','creamy','medium','sweet'],priority:6,margin:'medium'},{id:'sangria-desierto',name:{es:'Sangría del Desierto',en:'Desert Sangria'},emoji:'🍷',description:{es:'Vino tinto mexicano, frutas de temporada, brandy y un toque de canela.',en:'Mexican red wine, seasonal fruits, brandy and a touch of cinnamon.'},pairing:{es:'Excelente con carnes y quesos',en:'Excellent with meats and cheeses'},tags:['meat','vegetarian','balanced','medium','sweet'],priority:5,margin:'high'},{id:'michelada-ballena',name:{es:'Michelada de la Ballena',en:'Whale Michelada'},emoji:'🐋',description:{es:'Cerveza artesanal local, clamato, limón, salsa picante y especias secretas.',en:'Local craft beer, clamato, lime, hot sauce and secret spices.'},pairing:{es:'Ideal con mariscos y ceviches',en:'Ideal with seafood and ceviches'},tags:['seafood','snacks','citric','light','dry'],priority:7,margin:'high'},{id:'agua-fresca-jamaica',name:{es:'Agua Fresca de Jamaica Premium',en:'Premium Hibiscus Water'},emoji:'🌺',description:{es:'Infusión de jamaica orgánica, miel de agave y un toque de jengibre.',en:'Organic hibiscus infusion, agave honey and a touch of ginger.'},pairing:{es:'Refrescante con cualquier platillo',en:'Refreshing with any dish'},tags:['vegetarian','snacks','none','sweet','fresh'],priority:6,margin:'high'},{id:'limonada-cactus',name:{es:'Limonada de Cactus',en:'Cactus Lemonade'},emoji:'🌵',description:{es:'Limonada natural con extracto de nopal, menta y chía.',en:'Natural lemonade with nopal extract, mint and chia.'},pairing:{es:'Perfecto para el calor de Los Cabos',en:'Perfect for the Los Cabos heat'},tags:['vegetarian','seafood','none','balanced','fresh','citric'],priority:5,margin:'medium'}],wheelSegments:[{id:'whale',name:{es:'Ballena Saltando',en:'Jumping Whale'},icon:'🐋',color:'#0a4d68',prize:{es:'Ronda Ballena',en:'Whale Round'},benefit:{es:'Si pides una segunda bebida igual, la casa te regala un topping especial.',en:'If you order a second drink, you get a special topping free.'},shortBenefit:{es:'Topping premium en 2da ronda',en:'Premium topping on 2nd round'}},{id:'cactus',name:{es:'Cactus del Desierto',en:'Desert Cactus'},icon:'🌵',color:'#5d8a66',prize:{es:'Upgrade del Desierto',en:'Desert Upgrade'},benefit:{es:'Tu bebida se sirve en versión premium por solo $30 pesos más.',en:'Your drink is served premium for only $2 more.'},shortBenefit:{es:'Upgrade premium por $30',en:'Premium upgrade for $2'}},{id:'wave',name:{es:'Ola del Mar',en:'Sea Wave'},icon:'🌊',color:'#088395',prize:{es:'Ola Refrescante',en:'Refreshing Wave'},benefit:{es:'Agrega totopos con salsas de la casa al pedir tu bebida.',en:'Add chips with house salsas when ordering your drink.'},shortBenefit:{es:'Totopos con salsas gratis',en:'Free chips with salsas'}},{id:'sun',name:{es:'Sol del Atardecer',en:'Sunset Sun'},icon:'☀️',color:'#ff6b35',prize:{es:'Atardecer 2x1',en:'Sunset 2x1'},benefit:{es:'Si otro en tu mesa pide la MISMA bebida, la segunda tiene 25% de descuento.',en:'If someone else orders the SAME drink, the second one gets 25% off.'},shortBenefit:{es:'25% desc. en 2da bebida igual',en:'25% off on 2nd drink'}},{id:'boat',name:{es:'Panga de Pescador',en:'Fishing Boat'},icon:'🚣',color:'#c4704f',prize:{es:'Travesía Premium',en:'Premium Journey'},benefit:{es:'Si eliges nuestra versión Signature, te damos 15% de descuento.',en:'Choose our Signature version and get 15% off.'},shortBenefit:{es:'15% en versión Signature',en:'15% off Signature'}},{id:'fish',name:{es:'Marlín Dorado',en:'Golden Marlin'},icon:'🐟',color:'#fbb03b',prize:{es:'Catch del Día',en:'Catch of the Day'},benefit:{es:'15% de descuento en un postre si lo pides con la bebida.',en:'15% discount on dessert if you order it with your drink.'},shortBenefit:{es:'15% en postre',en:'15% off dessert'}},{id:'shell',name:{es:'Caracol de Arena',en:'Sand Shell'},icon:'🐚',color:'#e8d5b7',textColor:'#4a4a68',prize:{es:'Casi lo logras',en:'Almost there'},benefit:{es:'10% de descuento para tu próxima visita.',en:'10% off your next visit.'},shortBenefit:{es:'10% próxima visita',en:'10% off next visit'}},{id:'logo',name:{es:'Jackpot Cabo',en:'Cabo Jackpot'},icon:'⭐',color:'#f7931e',prize:{es:'Jackpot Cabo',en:'Cabo Jackpot'},benefit:{es:'¡Felicidades! Tu bebida incluye un upgrade premium GRATIS.',en:'Congratulations! Your drink includes a FREE premium upgrade.'},shortBenefit:{es:'Upgrade gratis',en:'Free upgrade'}}]};
+
+const TRANSLATIONS={es:{welcome_message:'Descubre tu bebida ideal inspirada en el mar y el desierto de Baja California Sur',start_experience:'Comenzar Experiencia',sommelier_title:'Sommelier IA',sommelier_greeting:'Soy tu sommelier de Los Cabos',your_recommendation:'Tu Recomendación',order_drink:'Pedir esta bebida',see_alternative:'Ver alternativa',perfect_pairing:'Marida perfecto con tu plato y el atardecer frente al mar.',drink_confirmed:'¡Bebida Confirmada!',wheel_intro_text:'Ahora gira la <strong>Rueda de la Ballena</strong> para desbloquear un beneficio especial sobre tu bebida.',spin_wheel:'Girar la Rueda',whale_wheel:'Rueda de la Ballena',tap_to_spin:'Toca para girar',spin:'¡Girar!',your_drink:'Tu bebida:',your_benefit:'Tu beneficio:',show_waiter:'Muestra este código al mesero:',confirm_order:'Confirmar Pedido',share_experience:'Compartir Experiencia',thank_you:'¡Gracias!',enjoy_drink:'Tu mesero preparará tu bebida con el beneficio especial.',stay_connected:'¿Quieres recibir recomendaciones y descuentos exclusivos?',send:'Enviar',play_again:'Jugar de nuevo',people_playing:'<strong>247</strong> personas han jugado hoy',toast_drink_selected:'¡Bebida seleccionada!',toast_spinning:'Girando la rueda...',toast_contact_saved:'¡Gracias! Te enviaremos promociones especiales.'},en:{welcome_message:'Discover your ideal drink inspired by the sea and desert of Baja California Sur',start_experience:'Start Experience',sommelier_title:'AI Sommelier',sommelier_greeting:"I'm your Los Cabos sommelier",your_recommendation:'Your Recommendation',order_drink:'Order this drink',see_alternative:'See alternative',perfect_pairing:'Pairs perfectly with your dish and the sunset by the sea.',drink_confirmed:'Drink Confirmed!',wheel_intro_text:'Now spin the <strong>Whale Wheel</strong> to unlock a special benefit for your drink.',spin_wheel:'Spin the Wheel',whale_wheel:'Whale Wheel',tap_to_spin:'Tap to spin',spin:'Spin!',your_drink:'Your drink:',your_benefit:'Your benefit:',show_waiter:'Show this code to your waiter:',confirm_order:'Confirm Order',share_experience:'Share Experience',thank_you:'Thank You!',enjoy_drink:'Your waiter will prepare your drink with the special benefit.',stay_connected:'Want to receive exclusive recommendations and discounts?',send:'Send',play_again:'Play again',people_playing:'<strong>247</strong> people have played today',toast_drink_selected:'Drink selected!',toast_spinning:'Spinning the wheel...',toast_contact_saved:'Thank you! We\'ll send you special promotions.'}};
+
+const i18n={currentLang:'es',setLanguage(lang){this.currentLang=lang;this.updateUI();},t(key){return TRANSLATIONS[this.currentLang][key]||TRANSLATIONS['es'][key]||key;},updateUI(){document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.getAttribute('data-i18n');const translation=this.t(key);if(translation)el.innerHTML=translation;});},init(){this.updateUI();}};
+
+const DrinkRecommender={calculateScore(drink,answers){let score=0;Object.values(answers).forEach(answer=>{if(drink.tags.includes(answer))score+=2;});score+=drink.priority*0.5;if(drink.margin==='high')score+=3;return score;},getRecommendations(answers,lang='es'){const scoredDrinks=APP_DATA.drinks.map(drink=>({...drink,score:this.calculateScore(drink,answers)}));scoredDrinks.sort((a,b)=>b.score-a.score);return scoredDrinks.slice(0,2);}};
+
+function generateWaiterCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let code='';for(let i=0;i<6;i++)code+=chars.charAt(Math.floor(Math.random()*chars.length));return code;}
+
+class WheelOfFortune{constructor(canvasId,segments){this.canvas=document.getElementById(canvasId);this.ctx=this.canvas.getContext('2d');this.segments=segments;this.numSegments=segments.length;this.anglePerSegment=(2*Math.PI)/this.numSegments;this.currentAngle=0;this.isSpinning=false;this.spinTimeout=null;this.spinAngleStart=0;this.spinTime=0;this.spinTimeTotal=0;this.selectedSegment=null;this.onSpinEnd=null;this.centerX=this.canvas.width/2;this.centerY=this.canvas.height/2;this.radius=Math.min(this.centerX,this.centerY)-10;this.draw();}draw(){this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);for(let i=0;i<this.numSegments;i++)this.drawSegment(i);this.drawCenter();}drawSegment(index){const startAngle=this.currentAngle+index*this.anglePerSegment;const endAngle=startAngle+this.anglePerSegment;const segment=this.segments[index];this.ctx.beginPath();this.ctx.moveTo(this.centerX,this.centerY);this.ctx.arc(this.centerX,this.centerY,this.radius,startAngle,endAngle);this.ctx.closePath();this.ctx.fillStyle=segment.color;this.ctx.fill();this.ctx.strokeStyle='rgba(255,255,255,0.3)';this.ctx.lineWidth=2;this.ctx.stroke();this.ctx.save();this.ctx.translate(this.centerX,this.centerY);const midAngle=startAngle+this.anglePerSegment/2;this.ctx.rotate(midAngle);const iconRadius=this.radius*0.65;this.ctx.font='32px Arial';this.ctx.textAlign='center';this.ctx.textBaseline='middle';this.ctx.shadowColor='rgba(0,0,0,0.3)';this.ctx.shadowBlur=4;this.ctx.fillText(segment.icon,iconRadius,0);this.ctx.restore();}drawCenter(){this.ctx.beginPath();this.ctx.arc(this.centerX,this.centerY,35,0,2*Math.PI);this.ctx.fillStyle='#ffffff';this.ctx.fill();this.ctx.strokeStyle='#fbb03b';this.ctx.lineWidth=4;this.ctx.stroke();this.ctx.beginPath();this.ctx.arc(this.centerX,this.centerY,25,0,2*Math.PI);this.ctx.fillStyle='#0a4d68';this.ctx.fill();this.ctx.font='20px Arial';this.ctx.textAlign='center';this.ctx.textBaseline='middle';this.ctx.fillText('🐋',this.centerX,this.centerY);}spin(callback){if(this.isSpinning)return;this.isSpinning=true;this.onSpinEnd=callback;this.spinAngleStart=Math.random()*10+10;this.spinTime=0;this.spinTimeTotal=Math.random()*3000+4000;this.rotateWheel();}rotateWheel(){this.spinTime+=30;if(this.spinTime>=this.spinTimeTotal){this.stopRotateWheel();return;}const spinAngle=this.spinAngleStart-this.easeOut(this.spinTime,0,this.spinAngleStart,this.spinTimeTotal);this.currentAngle+=(spinAngle*Math.PI/180);this.draw();this.spinTimeout=setTimeout(()=>this.rotateWheel(),30);}easeOut(t,b,c,d){const ts=(t/=d)*t;const tc=ts*t;return b+c*(tc+-3*ts+3*t);}stopRotateWheel(){clearTimeout(this.spinTimeout);this.isSpinning=false;const degrees=this.currentAngle*180/Math.PI;const adjustedDegrees=((degrees%360)+360)%360;const pointerAngle=270;const segmentDegrees=360/this.numSegments;let winningIndex=Math.floor(((pointerAngle-adjustedDegrees+360)%360)/segmentDegrees);winningIndex=winningIndex%this.numSegments;this.selectedSegment=this.segments[winningIndex];if(this.onSpinEnd)this.onSpinEnd(this.selectedSegment);}reset(){this.currentAngle=0;this.selectedSegment=null;this.draw();}}
+
+class RuedaDelMarApp{constructor(){this.state={currentScreen:'welcome-screen',language:'es',currentQuestionIndex:0,answers:{},selectedDrink:null,alternativeDrink:null,wheelPrize:null,waiterCode:null};this.screens={};this.wheel=null;this.init();}init(){document.querySelectorAll('.screen').forEach(screen=>{this.screens[screen.id]=screen;});i18n.init();this.setupEventListeners();}setupEventListeners(){document.querySelectorAll('.lang-btn').forEach(btn=>{btn.addEventListener('click',(e)=>{const lang=e.currentTarget.dataset.lang;this.setLanguage(lang);});});document.querySelector('.start-btn')?.addEventListener('click',()=>{this.goToScreen('sommelier-screen');this.loadQuestion(0);});document.querySelectorAll('.back-btn').forEach(btn=>{btn.addEventListener('click',(e)=>{const target=e.currentTarget.dataset.target;if(target==='sommelier-screen'&&this.state.currentQuestionIndex>0){this.loadQuestion(this.state.currentQuestionIndex-1);}else{this.goToScreen(target);}});});document.querySelector('.order-drink-btn')?.addEventListener('click',()=>{this.orderDrink();});document.querySelector('.see-alternative-btn')?.addEventListener('click',()=>{this.showAlternative();});document.querySelector('.spin-intro-btn')?.addEventListener('click',()=>{this.goToScreen('wheel-screen');this.initWheel();});document.querySelector('.spin-btn')?.addEventListener('click',()=>{this.spinWheel();});document.getElementById('wheel-canvas')?.addEventListener('click',()=>{this.spinWheel();});document.querySelector('.confirm-result-btn')?.addEventListener('click',()=>{this.confirmOrder();});document.querySelector('.share-btn')?.addEventListener('click',()=>{this.shareExperience();});document.querySelector('.submit-contact-btn')?.addEventListener('click',()=>{this.submitContact();});document.querySelector('.restart-btn')?.addEventListener('click',()=>{this.restart();});}setLanguage(lang){this.state.language=lang;i18n.setLanguage(lang);document.querySelectorAll('.lang-btn').forEach(btn=>{btn.classList.toggle('selected',btn.dataset.lang===lang);});}goToScreen(screenId){Object.values(this.screens).forEach(screen=>{screen.classList.remove('active');});const targetScreen=this.screens[screenId];if(targetScreen){targetScreen.classList.add('active');this.state.currentScreen=screenId;window.scrollTo(0,0);}}loadQuestion(index){const questions=APP_DATA.questions[this.state.language];if(index>=questions.length){this.generateRecommendation();return;}this.state.currentQuestionIndex=index;const question=questions[index];document.querySelector('.progress-text').textContent=`${index+1}/${questions.length}`;document.querySelector('.progress-fill').style.width=`${((index)/questions.length)*100}%`;const container=document.querySelector('.question-container');container.innerHTML=`<div class="question-card"><p class="question-text">${question.question}</p><div class="options-grid">${question.options.map(opt=>`<button class="option-btn ${this.state.answers[question.id]===opt.id?'selected':''}" data-question="${question.id}" data-value="${opt.id}"><span class="option-icon">${opt.icon}</span><span class="option-label">${opt.label}</span></button>`).join('')}</div></div>`;container.querySelectorAll('.option-btn').forEach(btn=>{btn.addEventListener('click',(e)=>{const questionId=e.currentTarget.dataset.question;const value=e.currentTarget.dataset.value;this.selectOption(questionId,value);});});}selectOption(questionId,value){this.state.answers[questionId]=value;document.querySelectorAll('.option-btn').forEach(btn=>{btn.classList.remove('selected');if(btn.dataset.value===value)btn.classList.add('selected');});setTimeout(()=>{const questions=APP_DATA.questions[this.state.language];const progress=((this.state.currentQuestionIndex+1)/questions.length)*100;document.querySelector('.progress-fill').style.width=`${progress}%`;this.loadQuestion(this.state.currentQuestionIndex+1);},300);}generateRecommendation(){const recommendations=DrinkRecommender.getRecommendations(this.state.answers,this.state.language);this.state.selectedDrink=recommendations[0];this.state.alternativeDrink=recommendations[1];this.displayRecommendation(this.state.selectedDrink);this.goToScreen('recommendation-screen');}displayRecommendation(drink){const lang=this.state.language;document.querySelector('.drink-name').textContent=drink.name[lang];document.querySelector('.drink-description').textContent=drink.description[lang];document.querySelector('.pairing-text').textContent=drink.pairing[lang];document.querySelector('.drink-emoji').textContent=drink.emoji;}showAlternative(){if(this.state.alternativeDrink){const temp=this.state.selectedDrink;this.state.selectedDrink=this.state.alternativeDrink;this.state.alternativeDrink=temp;this.displayRecommendation(this.state.selectedDrink);this.showToast('success','🔄');}}orderDrink(){this.showToast('success',i18n.t('toast_drink_selected'));this.goToScreen('wheel-intro-screen');}initWheel(){if(!this.wheel){this.wheel=new WheelOfFortune('wheel-canvas',APP_DATA.wheelSegments);}else{this.wheel.reset();}}spinWheel(){if(this.wheel&&!this.wheel.isSpinning){const spinBtn=document.querySelector('.spin-btn');spinBtn.classList.add('spinning');spinBtn.disabled=true;this.showToast('info',i18n.t('toast_spinning'));this.wheel.spin((result)=>{this.state.wheelPrize=result;spinBtn.classList.remove('spinning');spinBtn.disabled=false;setTimeout(()=>{this.showResult();},500);});}}showResult(){const prize=this.state.wheelPrize;const lang=this.state.language;this.state.waiterCode=generateWaiterCode();document.querySelector('.result-icon').textContent=prize.icon;document.querySelector('.result-title').textContent=prize.prize[lang];document.querySelector('.result-prize').textContent=prize.benefit[lang];document.querySelector('.drink-name-result').textContent=this.state.selectedDrink.name[lang];document.querySelector('.benefit-detail').textContent=prize.shortBenefit[lang];document.querySelector('.code-display').textContent=this.state.waiterCode;this.goToScreen('result-screen');document.querySelector('.result-icon-wrapper').classList.add('celebrate');setTimeout(()=>{document.querySelector('.result-icon-wrapper').classList.remove('celebrate');},1000);}confirmOrder(){this.goToScreen('final-screen');}shareExperience(){const drink=this.state.selectedDrink;const prize=this.state.wheelPrize;const lang=this.state.language;const shareText=lang==='es'?`🐋 Descubrí mi bebida ideal en Los Cabos: ${drink.name[lang]}! Gané: ${prize.prize[lang]}`:`🐋 I discovered my ideal drink in Los Cabos: ${drink.name[lang]}! I won: ${prize.prize[lang]}`;if(navigator.share){navigator.share({title:'Rueda del Mar de Cortés',text:shareText}).catch(console.log);}else{navigator.clipboard?.writeText(shareText).then(()=>{this.showToast('success','¡Copiado!');});}}submitContact(){const input=document.querySelector('.phone-input');if(input.value.trim()){this.showToast('success',i18n.t('toast_contact_saved'));input.value='';}}restart(){this.state={currentScreen:'welcome-screen',language:this.state.language,currentQuestionIndex:0,answers:{},selectedDrink:null,alternativeDrink:null,wheelPrize:null,waiterCode:null};if(this.wheel)this.wheel.reset();this.goToScreen('welcome-screen');}showToast(type,message){const container=document.getElementById('toast-container');const toast=document.createElement('div');toast.className=`toast ${type}`;toast.innerHTML=`<span class="toast-message">${message}</span>`;container.appendChild(toast);setTimeout(()=>{toast.remove();},3000);}}
+
+document.addEventListener('DOMContentLoaded',()=>{window.app=new RuedaDelMarApp();});
+</script>
+</body>
+</html>
